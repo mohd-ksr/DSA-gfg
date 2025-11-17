@@ -2,16 +2,17 @@ class Solution {
   public:
     int getSecondLargest(vector<int> &arr) {
         // code here
-        int largest = -1, secondLargest = -1;
-        for(auto &n:arr){
-            if(n>largest){
-                secondLargest = largest;
-                largest = n;
+        int maxi = INT_MIN;
+        int s_maxi = INT_MIN;
+        for(int n:arr){
+            if(n>maxi){
+                s_maxi = maxi;
+                maxi = n;
             }
-            if(n<largest && n>secondLargest){
-                secondLargest = n;
+            else if(n<maxi && n>s_maxi){
+                s_maxi = n;
             }
         }
-        return secondLargest;
+        return s_maxi;
     }
 };
