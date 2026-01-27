@@ -1,31 +1,19 @@
 class Solution {
 private:
-    int dfs(vector<int>& coins, int n, int sum,  vector<vector<int>>&dp){
+    int solve(int ind, vector<int>& coins, int sum,  vector<vector<int>>&dp){
         if(sum==0)return 1;
-        if(sum<0 || n==0)return 0;
-        if(dp[n-1][sum]!=-1)return dp[n-1][sum];
-        return dp[n-1][sum]=dfs(coins, n, sum-coins[n-1],dp)+dfs(coins, n-1, sum, dp);
+        if(ind<=0)return 0;
+        
+        if(dp[ind-1][sum]!=-1)return dp[ind-1][sum];
+        if(coins[ind-1]<=sum){
+            return dp[ind-1][sum]=solve(ind, coins, sum-coins[ind-1], dp)+solve(ind-1, coins, sum, dp);
+        }
+        else return dp[ind-1][sum]=solve(ind-1, coins, sum, dp);
     }
 public:
     int count(vector<int>& coins, int sum) {
-        vector<vector<int>>dp(coins.size(), vector<int>(sum+1,-1));
-        return dfs(coins, coins.size(), sum,dp);
+        int n = coins.size();
+        vector<vector<int>>dp(n+1, vector<int>(sum+1, -1));
+        return solve(n, coins, sum, dp);
     }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
