@@ -1,30 +1,34 @@
 class Solution {
 private:
-    bool dfs(int node, int parent, vector<vector<int>>&adjList, vector<bool>&vis){
-        vis[node]=true;
-        
-        for(int nei:adjList[node]){
-            if(!vis[nei]){
-                if(dfs(nei, node, adjList, vis))return true;
+    bool check(int u, vector<int>adj[], vector<bool>&vis){
+        queue<pair<int, int>>q;
+        q.push({u, -1});
+        vis[u]=true;
+        while(!q.empty()){
+            int node = q.front().first;
+            int par = q.front().second;
+            q.pop();
+            for(auto nei:adj[node]){
+                if(!vis[nei]){
+                    vis[nei]=true;
+                    q.push({nei, node});
+                }
+                else if(nei!=par)return true;
             }
-            else if(parent!=nei)return true;
         }
         return false;
     }
 public:
     bool isCycle(int V, vector<vector<int>>& edges) {
-        vector<vector<int>>adjList(V);
-        for(auto &e:edges){
-            adjList[e[0]].push_back(e[1]);
-            adjList[e[1]].push_back(e[0]);
+        vector<int>adj[V];
+        for(auto edge:edges){
+            adj[edge[0]].push_back(edge[1]);
+            adj[edge[1]].push_back(edge[0]);
         }
-        
         vector<bool>vis(V, false);
-        for(int i=0; i<V; i++){
-            if(!vis[i] && dfs(i,-1,adjList,vis)) return true;
+        for(int i=0;i<V; i++){
+            if(!vis[i] && check(i, adj, vis))return true;
         }
-        
         return false;
-        
     }
 };
