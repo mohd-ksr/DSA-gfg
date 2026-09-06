@@ -1,46 +1,35 @@
 class Solution {
-  public:
-    vector<vector<int>> nearest(vector<vector<int>>& grid) {
-        // code here
-        int r = grid.size();
-        int c = grid[0].size();
-        
-        vector<vector<int>>dist(r,vector<int>(c,0));
+public:
+    vector<vector<int>> nearest(vector<vector<int>>& mat) {
         queue<pair<int, int>>q;
-        
-        for(int i=0; i<r; i++){
-            for(int j=0; j<c; j++){
-                if(grid[i][j]==1)q.push({i, j});
+        for(int i=0; i<mat.size(); i++){
+            for(int j=0; j<mat[0].size(); j++){
+                if(mat[i][j]==1){
+                    q.push({i, j});
+                    mat[i][j]=0;
+                }
+                else{
+                    mat[i][j]=-1;
+                }
             }
         }
-        
+        int dx[] = {-1, 0, 1, 0};
+        int dy[] = {0, -1, 0, 1};
         while(!q.empty()){
-            int size = q.size();
-            while(size--){
-                auto [i, j] = q.front(); q.pop();
-                if(i-1>=0 && grid[i-1][j]==0){
-                    grid[i-1][j]=1;
-                    dist[i-1][j]=dist[i][j]+1;
-                    q.push({i-1, j});
-                }
-                if(j-1>=0 && grid[i][j-1]==0){
-                    grid[i][j-1]=1;
-                    dist[i][j-1]=dist[i][j]+1;
-                    q.push({i, j-1});
-                }
-                if(i+1<r && grid[i+1][j]==0){
-                    grid[i+1][j]=1;
-                    dist[i+1][j]=dist[i][j]+1;
-                    q.push({i+1, j});
-                }
-                if(j+1<c && grid[i][j+1]==0){
-                    grid[i][j+1]=1;
-                    dist[i][j+1]=dist[i][j]+1;
-                    q.push({i, j+1});
+            int i = q.front().first;
+            int j = q.front().second;
+            q.pop();
+            for(int k=0; k<4; k++){
+                int ni = i+dx[k];
+                int nj = j+dy[k];
+                if(ni>=0 && ni<mat.size() && nj>=0 && nj<mat[0].size() && mat[ni][nj]==-1){
+                    mat[ni][nj] = mat[i][j]+1;
+                    q.push({ni, nj});
                 }
             }
         }
-        return dist;
+        return mat;
+        
     }
 };
 
