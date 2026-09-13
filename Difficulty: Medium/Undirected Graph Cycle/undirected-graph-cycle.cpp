@@ -1,9 +1,9 @@
 class Solution {
 private:
-    bool check(int u, vector<int>adj[], vector<bool>&vis){
+    bool bfs(int u, vector<int>adj[], vector<bool>&vis){
         queue<pair<int, int>>q;
-        q.push({u, -1});
         vis[u]=true;
+        q.push({u, -1});
         while(!q.empty()){
             int node = q.front().first;
             int par = q.front().second;
@@ -25,9 +25,12 @@ public:
             adj[edge[0]].push_back(edge[1]);
             adj[edge[1]].push_back(edge[0]);
         }
+        
         vector<bool>vis(V, false);
-        for(int i=0;i<V; i++){
-            if(!vis[i] && check(i, adj, vis))return true;
+        for(int i=0; i<V; i++){
+            if(!vis[i]){
+                if(bfs(i, adj, vis))return true;
+            }
         }
         return false;
     }
